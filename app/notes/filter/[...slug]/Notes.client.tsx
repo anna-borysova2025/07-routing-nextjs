@@ -13,7 +13,11 @@ import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { fetchNotes } from '@/lib/api';
 import { useDebouncedCallback } from 'use-debounce';
 
-export default function NotesClient() {
+interface NotesClientProps {
+  tag: string;
+}
+
+export default function NotesClient({ tag }: NotesClientProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -24,8 +28,8 @@ export default function NotesClient() {
   }, 500);
 
   const { data, isSuccess, isLoading, isError } = useQuery({
-    queryKey: ['notes', searchQuery, page],
-    queryFn: () => fetchNotes(searchQuery, page),
+    queryKey: ['notes', searchQuery, page, tag],
+    queryFn: () => fetchNotes(searchQuery, page, 12, tag === 'all' ? '' : tag),
     staleTime: 1000 * 60 * 5, // 5 minutes
     placeholderData: keepPreviousData,
   });

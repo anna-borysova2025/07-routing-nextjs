@@ -23,12 +23,14 @@ export const fetchNotes = async (
   searchText: string,
   page: number = 1,
   perPage: number = 12,
+  tag: string,
 ): Promise<ApiResponse> => {
   const response = await noteApi.get<ApiResponse>('/notes', {
     params: {
-      search: searchText,
+      search: searchText || undefined,
       page: page,
       perPage: perPage,
+      tag: tag || undefined,
     },
   });
   return response.data;
